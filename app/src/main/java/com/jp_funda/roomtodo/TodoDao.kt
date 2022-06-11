@@ -6,17 +6,17 @@ import androidx.room.*
 interface TodoDao {
     // Create
     @Insert
-    fun insertTodo(todo: Todo)
+    suspend fun insertTodo(todo: Todo)
 
     // Read
     @Query("SELECT * FROM Todo")
-    fun getAllTodos(): List<Todo>
+    suspend fun getAllTodos(): List<Todo>
 
     // Update
     @Update
-    fun updateTodo(todo: Todo)
+    suspend fun updateTodo(todo: Todo)
 
     // Delete
     @Delete
-    fun deleteTodo(todo: Todo)
+    suspend fun deleteTodo(todo: Todo)
 }
