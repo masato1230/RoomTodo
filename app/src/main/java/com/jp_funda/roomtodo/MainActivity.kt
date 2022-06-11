@@ -4,15 +4,21 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.R
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jp_funda.roomtodo.ui.theme.RoomTodoTheme
@@ -44,12 +50,53 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContent(viewModel: MainViewModel) {
+    val isShowDialog = remember { mutableStateOf(false) }
+
     Scaffold(floatingActionButton = {
-        FloatingActionButton(onClick = { /*TODO*/ }) {
+        FloatingActionButton(onClick = { isShowDialog.value = true }) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "追加ボタン")
         }
     }) {
-
+        if (isShowDialog.value) {
+            EditDialog(isShowDialog = isShowDialog, viewModel = viewModel)
+        }
     }
 }
 
+@Composable
+fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
+    AlertDialog(
+        onDismissRequest = { isShowDialog.value = false },
+        title = { Text(text = "Todo新規作成") },
+        text = {
+            Column {
+                TextField(value = "", onValueChange = { /* Todo */ })
+                TextField(value = "", onValueChange = { /* Todo */ })
+            }
+        },
+        buttons = {
+            Row(
+                modifier = Modifier.padding(all = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    modifier = Modifier.width(120.dp),
+                    onClick = { isShowDialog.value = false },
+                ) {
+                    Text(text = "キャンセル")
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(
+                    modifier = Modifier.width(120.dp),
+                    onClick = {
+                        isShowDialog.value = false
+                        /* TODO todoの追加 */
+                    },
+                ) {
+                    Text(text = "OK")
+                }
+            }
+        }
+    )
+}
