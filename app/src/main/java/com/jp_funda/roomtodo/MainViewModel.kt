@@ -1,10 +1,7 @@
-package com.jp_funda.roomtodo.ui.theme
+package com.jp_funda.roomtodo
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.jp_funda.roomtodo.Todo
-import com.jp_funda.roomtodo.TodoDatabase
-import com.jp_funda.roomtodo.TodoRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : ViewModel() {
