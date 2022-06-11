@@ -65,13 +65,25 @@ fun MainContent(viewModel: MainViewModel) {
 
 @Composable
 fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
+    val title = viewModel.title.observeAsState()
+    val description = viewModel.description.observeAsState()
+
     AlertDialog(
-        onDismissRequest = { isShowDialog.value = false },
+        onDismissRequest = {
+            isShowDialog.value = false
+            viewModel.clearTitleAndDescription()
+        },
         title = { Text(text = "Todo新規作成") },
         text = {
             Column {
-                TextField(value = "", onValueChange = { /* Todo */ })
-                TextField(value = "", onValueChange = { /* Todo */ })
+                Text(text = "タイトル")
+                TextField(
+                    value = title.value ?: "",
+                    onValueChange = { viewModel.setTitle(it) })
+                Text(text = "詳細")
+                TextField(
+                    value = description.value ?: "",
+                    onValueChange = { viewModel.setDescription(it) })
             }
         },
         buttons = {
@@ -82,7 +94,10 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
                     modifier = Modifier.width(120.dp),
-                    onClick = { isShowDialog.value = false },
+                    onClick = {
+                        isShowDialog.value = false
+                        viewModel.clearTitleAndDescription()
+                    },
                 ) {
                     Text(text = "キャンセル")
                 }
@@ -91,7 +106,7 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
                     modifier = Modifier.width(120.dp),
                     onClick = {
                         isShowDialog.value = false
-                        /* TODO todoの追加 */
+                        viewModel.addTodo()
                     },
                 ) {
                     Text(text = "OK")
