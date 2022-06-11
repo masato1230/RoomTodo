@@ -5,19 +5,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -50,6 +46,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContent(viewModel: MainViewModel) {
+    LaunchedEffect(Unit) {
+        viewModel.refreshTodos()
+    }
+
     val isShowDialog = remember { mutableStateOf(false) }
 
     Scaffold(floatingActionButton = {
@@ -60,6 +60,8 @@ fun MainContent(viewModel: MainViewModel) {
         if (isShowDialog.value) {
             EditDialog(isShowDialog = isShowDialog, viewModel = viewModel)
         }
+
+        TodoList(viewModel = viewModel)
     }
 }
 
@@ -114,4 +116,17 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
             }
         }
     )
+}
+
+@Composable
+fun TodoList(viewModel: MainViewModel) {
+    val observedTodos = viewModel.todos.observeAsState()
+
+    observedTodos.value?.let { todos ->
+        LazyColumn {
+            items(todos) { todo ->
+                Text(text = todo.title)
+            }
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.jp_funda.roomtodo
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : ViewModel() {
@@ -37,7 +38,7 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     // Todo全権取得し直し
-    private fun refreshTodos() {
+    fun refreshTodos() {
         viewModelScope.launch {
             _todos.postValue(todoRepository.getAllTodo())
         }
