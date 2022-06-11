@@ -7,12 +7,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -125,7 +129,28 @@ fun TodoList(viewModel: MainViewModel) {
     observedTodos.value?.let { todos ->
         LazyColumn {
             items(todos) { todo ->
-                Text(text = todo.title)
+                TodoRow(todo)
+            }
+        }
+    }
+}
+
+@Composable
+fun TodoRow(todo: Todo) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        elevation = 5.dp,
+    ) {
+        Row(
+            modifier = Modifier.padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(text = todo.title)
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "削除ボタン")
             }
         }
     }
