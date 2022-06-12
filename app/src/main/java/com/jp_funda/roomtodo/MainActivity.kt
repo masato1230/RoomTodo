@@ -16,10 +16,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jp_funda.roomtodo.ui.theme.Purple700
 import com.jp_funda.roomtodo.ui.theme.RoomTodoTheme
 
 class MainActivity : ComponentActivity() {
@@ -55,11 +57,13 @@ fun MainContent(viewModel: MainViewModel) {
 
     val isShowDialog = remember { mutableStateOf(false) }
 
-    Scaffold(floatingActionButton = {
-        FloatingActionButton(onClick = { isShowDialog.value = true }) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "追加ボタン")
-        }
-    }) {
+    Scaffold(
+        backgroundColor = Color.White,
+        floatingActionButton = {
+            FloatingActionButton(onClick = { isShowDialog.value = true }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "追加ボタン")
+            }
+        }) {
         if (isShowDialog.value) {
             EditDialog(isShowDialog = isShowDialog, viewModel = viewModel)
         }
@@ -147,8 +151,7 @@ fun TodoRow(todo: Todo, viewModel: MainViewModel, isShowDialog: MutableState<Boo
             .clickable {
                 viewModel.setUpdatingTodo(todo)
                 isShowDialog.value = true
-            }
-        ,
+            },
         elevation = 5.dp,
     ) {
         Row(
