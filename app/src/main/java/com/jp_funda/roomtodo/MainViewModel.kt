@@ -1,9 +1,7 @@
 package com.jp_funda.roomtodo
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : ViewModel() {
