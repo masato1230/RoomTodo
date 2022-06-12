@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jp_funda.roomtodo.ui.theme.Purple700
 import com.jp_funda.roomtodo.ui.theme.RoomTodoTheme
 
 class MainActivity : ComponentActivity() {

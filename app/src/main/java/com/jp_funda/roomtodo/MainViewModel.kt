@@ -30,10 +30,6 @@ class MainViewModel(application: Application) : ViewModel() {
         _description.value = todo.description
     }
 
-    fun getUpdatingTodo(): Todo? {
-        return updatingTodo
-    }
-
     val isUpdating: Boolean
         get() {
             return updatingTodo != null
