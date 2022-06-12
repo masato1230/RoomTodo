@@ -22,6 +22,23 @@ class MainViewModel(application: Application) : ViewModel() {
     private val _description = MutableLiveData<String>()
     val description: LiveData<String> = _description
 
+    private var updatingTodo: Todo? = null
+
+    fun setUpdatingTodo(todo: Todo) {
+        updatingTodo = todo
+        _title.value = todo.title
+        _description.value = todo.description
+    }
+
+    fun getUpdatingTodo(): Todo? {
+        return updatingTodo
+    }
+
+    val isUpdating: Boolean
+        get() {
+            return updatingTodo != null
+        }
+
     fun setTitle(value: String) {
         _title.value = value
     }
@@ -53,9 +70,12 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     // 更新
-    fun updateTodo(todo: Todo) {
+    fun updateTodo() {
         viewModelScope.launch {
-            todoRepository.updateTodo(todo)
+            updatingTodo!!.title = _title.value ?: ""
+            updatingTodo!!.description = _description.value ?: ""
+            todoRepository.updateTodo(updatingTodo!!)
+            updatingTodo = null
             refreshTodos()
         }
     }

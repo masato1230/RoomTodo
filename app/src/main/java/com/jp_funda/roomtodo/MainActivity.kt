@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -63,7 +64,7 @@ fun MainContent(viewModel: MainViewModel) {
             EditDialog(isShowDialog = isShowDialog, viewModel = viewModel)
         }
 
-        TodoList(viewModel = viewModel)
+        TodoList(viewModel, isShowDialog)
     }
 }
 
@@ -77,7 +78,7 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
             isShowDialog.value = false
             viewModel.clearTitleAndDescription()
         },
-        title = { Text(text = "Todo新規作成") },
+        title = { Text(text = if (viewModel.isUpdating) "Todo更新" else "Todo新規作成") },
         text = {
             Column {
                 Text(text = "タイトル")
@@ -110,7 +111,11 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
                     modifier = Modifier.width(120.dp),
                     onClick = {
                         isShowDialog.value = false
-                        viewModel.addTodo()
+                        if (viewModel.isUpdating) {
+                            viewModel.updateTodo()
+                        } else {
+                            viewModel.addTodo()
+                        }
                     },
                 ) {
                     Text(text = "OK")
@@ -121,24 +126,29 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
 }
 
 @Composable
-fun TodoList(viewModel: MainViewModel) {
+fun TodoList(viewModel: MainViewModel, isShowDialog: MutableState<Boolean>) {
     val observedTodos = viewModel.todos.observeAsState()
 
     observedTodos.value?.let { todos ->
         LazyColumn {
             items(todos) { todo ->
-                TodoRow(todo, viewModel)
+                TodoRow(todo, viewModel, isShowDialog)
             }
         }
     }
 }
 
 @Composable
-fun TodoRow(todo: Todo, viewModel: MainViewModel) {
+fun TodoRow(todo: Todo, viewModel: MainViewModel, isShowDialog: MutableState<Boolean>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable {
+                viewModel.setUpdatingTodo(todo)
+                isShowDialog.value = true
+            }
+        ,
         elevation = 5.dp,
     ) {
         Row(
