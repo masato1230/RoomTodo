@@ -79,7 +79,7 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
     AlertDialog(
         onDismissRequest = {
             isShowDialog.value = false
-            viewModel.clearTitleAndDescription()
+            viewModel.clearData()
         },
         title = { Text(text = if (viewModel.isUpdating) "Todo更新" else "Todo新規作成") },
         text = {
@@ -104,7 +104,7 @@ fun EditDialog(isShowDialog: MutableState<Boolean>, viewModel: MainViewModel) {
                     modifier = Modifier.width(120.dp),
                     onClick = {
                         isShowDialog.value = false
-                        viewModel.clearTitleAndDescription()
+                        viewModel.clearData()
                     },
                 ) {
                     Text(text = "キャンセル")

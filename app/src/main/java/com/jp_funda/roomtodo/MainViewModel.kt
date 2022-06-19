@@ -43,7 +43,8 @@ class MainViewModel(application: Application) : ViewModel() {
         _description.value = value
     }
 
-    fun clearTitleAndDescription() {
+    fun clearData() {
+        updatingTodo = null
         _title.value = ""
         _description.value = ""
     }
@@ -60,7 +61,7 @@ class MainViewModel(application: Application) : ViewModel() {
         viewModelScope.launch {
             val todo = Todo(title = _title.value ?: "", description = _description.value ?: "")
             todoRepository.createTodo(todo)
-            clearTitleAndDescription()
+            clearData()
             refreshTodos()
         }
     }
@@ -71,7 +72,7 @@ class MainViewModel(application: Application) : ViewModel() {
             updatingTodo!!.title = _title.value ?: ""
             updatingTodo!!.description = _description.value ?: ""
             todoRepository.updateTodo(updatingTodo!!)
-            updatingTodo = null
+            clearData()
             refreshTodos()
         }
     }
